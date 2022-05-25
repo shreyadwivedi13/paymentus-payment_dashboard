@@ -1,0 +1,50 @@
+body {
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+}
+
+.payment-details {
+    margin-top: 5vh;
+    margin-left: 8vh;
+    flex: 5;
+    padding-left: 1em;
+    border-color: dimgray;
+    color: white;
+}
+
+#details {
+    margin-top: 2vh;
+    margin-left: 1vh;
+    margin-bottom: 5vh;
+    background-color: aliceblue;
+    padding: 6vh;
+    padding-bottom: 2vh;
+    border-radius: 1em;
+    color: rgb(27, 52, 123);
+    width: 65%;
+    min-width: 40%;
+}
+
+#header {
+    padding-bottom: 8vh;
+    padding-top: 0.05em;
+    text-align: center;
+}
+
+.row {
+    display: flex;
+}
+
+.row-Header {
+    flex: 1;
+    padding-left: 6vh;
+}
+
+.detsDisplay {
+    flex: 1;
+    text-align: right;
+    padding-right: 6vh;
+}

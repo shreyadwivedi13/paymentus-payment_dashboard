@@ -1,0 +1,99 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* Firefox */
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+body {
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+}
+
+.dashboard {
+    flex: 5;
+    margin-left: 2em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-color: dimgray;
+}
+
+#desktopIcon {
+    color: rgb(87, 87, 194);
+}
+
+#iconHeading {
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+}
+
+#heading {
+    padding-left: 2vh;
+}
+
+#searchForm {
+    margin-top: 1vh;
+}
+
+#filterform {
+    margin-left: 8vh;
+    margin-right: 8vh;
+    margin-top: 2vh;
+}
+
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root {
+    border-radius: 1rem;
+    margin-bottom: 2vh;
+    margin-right: 2vh;
+    margin-left: 1vh;
+    margin-top: 4vh;
+}
+
+.datePicker {
+    height: 4vh;
+    width: 17vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    margin-left: 2vh;
+    border-radius: 1vh;
+    border-color: rgb(205, 201, 201);
+}
+
+.transactionTable {
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(0, 0, 0.47);
+    padding: 20px;
+    margin-top: 60px;
+    margin-left: 5px;
+    margin-right: 11px;
+    background-color: aliceblue;
+    border-radius: 1rem;
+    margin-bottom: 15px;
+    max-width: 155vh;
+}
+
+#viewdets {
+    text-decoration: none;
+}
+
+.transactions {
+    font-weight: 500;
+}
+
+.errorMSG {
+    color: crimson;
+}
