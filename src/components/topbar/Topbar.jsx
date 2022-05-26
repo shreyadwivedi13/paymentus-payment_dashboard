@@ -13,7 +13,7 @@ import { Logout} from '@mui/icons-material';
 import { Button } from '@mui/material';
 import "./topbar.styles.css"
 
-const IDLE_TIME = 600000;
+const IDLE_TIME = 60;
 const LOGOUT_TIME = 300000;
 const REFRESH_API_TOKEN = 600000;
 let logoutTimerId = undefined;

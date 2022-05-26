@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 
-import { Sidebar, Topbar,Footer } from "../../components";
+import { Sidebar, Topbar,Footer,ErrorPage} from "../../components";
 
 import { loginContext } from "../../App";
 import "./dashboard.styles.css";
@@ -543,10 +543,7 @@ const Dashboard = () => {
           <Footer/>
         </section>
       ) : (
-        <div><div id="warning"><h2 id="warningHeader" color="red"><strong>The requested URL was not found on this server.</strong></h2>
-        <div id="warningDescription"><ul><li><p>you might have been logged out, please try logging in again.</p></li>
-          <li><p>if you entered the URL manually please check your spellings.</p></li>
-           <li><p>if you think this is a server error, please contact the Administrator.</p></li></ul></div></div><Footer/></div>
+        <div><ErrorPage/><Footer/></div>
 
       )}
     </>

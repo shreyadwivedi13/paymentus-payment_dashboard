@@ -1,31 +1,40 @@
 import React from 'react';
 import { Box, Modal, Typography } from '@mui/material';
-import { Alert, AlertTitle} from '@mui/material';
+import { Button} from '@mui/material';
+import "./timeoutModal.styles.css"
+
 
 const TimeoutModal = ({show, toShowModal}) => {
-    const handleStayLoginClick = () => {
+    const onRequestClose = () => {
         toShowModal();
     };
+   
+    
+   /*
+    const onLogOffCall=
+   log out code
+   */
 
-    return (
+    return (<>
         <Modal
             open={show}
             onClose={toShowModal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
-            <Box>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Alert severity="warning">
-  <AlertTitle>Warning</AlertTitle>
-  <strong>You're about to be logged out in 5 minutes, click anywhere on the screen to stay logged in!</strong>
-</Alert>
-                </Typography>
+            <Box id="timeout">
+                <h2 id="warningtimeHeader" color="red"><strong>session timeout</strong></h2>
+            <div id="warningTimeDescription">
+                You're being timed out due to inactivity. Please choose to stay signed in or to logoff. Otherwise, you will be logged off automatically
+                </div>
+            <div className="btns">
+            <Button onClick={onRequestClose}  variant="contained" fontSize="small" id="btn1">Log off</Button>
+            <Button onClick={onRequestClose}  variant="contained" fontSize="small" id="btn2">Stay Logged In</Button>
+            </div>
+            
             </Box>
         </Modal>
+        </>
     );
 };
 

@@ -6,3 +6,5 @@ export { Topbar }
 from './topbar';
 export { Footer }
 from './footer';
+export { ErrorPage }
+from './errorPage';
