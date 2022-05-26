@@ -4,3 +4,5 @@ export { TimeoutModal }
 from "./timeout-modal";
 export { Topbar }
 from './topbar';
+export { Footer }
+from './footer';

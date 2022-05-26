@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 
-import { Sidebar, Topbar } from "../../components";
+import { Sidebar, Topbar,Footer } from "../../components";
 
 import { loginContext } from "../../App";
 import "./dashboard.styles.css";
@@ -456,25 +456,30 @@ const Dashboard = () => {
             <br></br>
             <br></br>
             <h3>Payment Date Range:</h3>
-            <br></br>
-            Start Date:{" "}
+            <br></br><div className="endDpicker">
+            <p className="endDheading">Start Date:{" "}</p>
             <input
               type="date"
               name="start_date"
               value={startDate}
               onChange={inputHandler}
               className="datePicker"
-            ></input>
+              id="startDvalue"
+
+            ></input></div>
             <br></br>
-            <br></br>
-            End Date:{" "}
+            <br></br><div className="endDpicker">
+            <p className="endDheading">End Date:{" "}
+</p>
             <input
               type="date"
               name="end_date"
               value={endDate}
               onChange={inputHandler}
               className="datePicker"
+              id="endDvalue"
             ></input>
+            </div>
             <br></br>
             <div className="errorMSG">{invalidPaymentDateRange}</div>
             <br></br>
@@ -491,42 +496,37 @@ const Dashboard = () => {
           <strong><h2>Transactions:</h2></strong>
 
             <TableContainer component={Paper}>
-            <Table className="tables" aria-label="simple table">
-            <TableHead>
+            <Table className="tables" aria-label="simple table"  >
+            <TableHead >
             <TableRow>
-            <TableCell>Actions</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Account Number</TableCell>
-              <TableCell>Channel</TableCell>
-              <TableCell>Confirmation Number</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Payment Amount</TableCell>
-              <TableCell>Payment Method</TableCell>
-              <TableCell>Payment Type</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>User ID</TableCell>
-              
+              <TableCell align="left">Status</TableCell>
+              <TableCell align="left">Account Number</TableCell>
+              <TableCell align="left">Channel</TableCell>
+              <TableCell align="left">Confirmation Number</TableCell>
+              <TableCell align="left">Email</TableCell>
+              <TableCell align="left">Payment Amount</TableCell>
+              <TableCell align="left">Payment Method</TableCell>
+              <TableCell align="left">Payment Type</TableCell>
+              <TableCell align="left">Date</TableCell>
+              <TableCell align="left">User ID</TableCell>
+              <TableCell align="left">Actions</TableCell>
             </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody >
             {paymentData.map((payment) => (
               <TableRow key={payment.confirmationNumber} sx={{'&:last-child td, &:last-child th': {border: 0}}}>
-                <TableCell component="th" scope="payment"><Link to="/PaymentDetails" state={{ confirmationKey: payment.confirmationNumber }} id="viewdets">
-<PageviewRounded/> Details
-</Link></TableCell>
-                <TableCell align="right">
-                  {payment.Status}</TableCell>
-                  <TableCell align="right">{payment.accountNumber}</TableCell>
-                <TableCell align="right">{payment.channel}</TableCell>
-                <TableCell align="right">{payment.confirmationNumber}</TableCell>
-                <TableCell align="right">{payment.email}</TableCell>
-                <TableCell align="right">{payment.paymentAmount}</TableCell>
-                <TableCell align="right">{payment.paymentMethod}</TableCell>
-                <TableCell align="right">{payment.paymentType}</TableCell>
-                <TableCell align="right">{payment.paymentDate}</TableCell>
-                <TableCell align="right">{payment.userId}</TableCell>
-                
-              
+                <TableCell component="th" scope="payment">{payment.Status}</TableCell>
+                <TableCell align="left">{payment.accountNumber}</TableCell>
+                <TableCell align="left">{payment.channel}</TableCell>
+                <TableCell align="left">{payment.confirmationNumber}</TableCell>
+                <TableCell align="left">{payment.email}</TableCell>
+                <TableCell align="left">{payment.paymentAmount}</TableCell>
+                <TableCell align="left">{payment.paymentMethod}</TableCell>
+                <TableCell align="left">{payment.paymentType}</TableCell>
+                <TableCell align="left">{payment.paymentDate}</TableCell>
+                <TableCell align="left">{payment.userId}</TableCell>
+                <TableCell align="left"><Link to="/PaymentDetails" state={{ confirmationKey: payment.confirmationNumber }} id="viewdets">
+                <PageviewRounded/> Details</Link></TableCell>              
               </TableRow>
               ))}
             </TableBody>
@@ -540,10 +540,14 @@ const Dashboard = () => {
            
           </div>
           </div>
-          
+          <Footer/>
         </section>
       ) : (
-        <h1>You are not logged in</h1>
+        <div><div id="warning"><h2 id="warningHeader" color="red"><strong>The requested URL was not found on this server.</strong></h2>
+        <div id="warningDescription"><ul><li><p>you might have been logged out, please try logging in again.</p></li>
+          <li><p>if you entered the URL manually please check your spellings.</p></li>
+           <li><p>if you think this is a server error, please contact the Administrator.</p></li></ul></div></div><Footer/></div>
+
       )}
     </>
   );

@@ -3,9 +3,9 @@
 }
 
 .sidebar {
+    position: sticky;
     flex: 1;
     background-color: aliceblue;
-    position: sticky;
     top: 50px;
     padding-top: 1em;
     padding-left: 2em;
@@ -46,6 +46,11 @@
 
 #item-two {
     top: 2em;
+}
+
+#sticks {
+    position: sticky;
+    bottom: 0;
 }
 
 .dashboard-item:hover {

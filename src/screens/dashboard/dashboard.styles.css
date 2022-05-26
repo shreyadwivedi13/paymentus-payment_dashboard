@@ -15,10 +15,6 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-body {
-    height: 100vh;
-}
-
 .container {
     display: flex;
 }
@@ -73,6 +69,23 @@ body {
     border-color: rgb(205, 201, 201);
 }
 
+.endDpicker {
+    display: flex;
+    justify-content: space-between;
+}
+
+.endDheading {
+    flex: 1;
+}
+
+#endDvalue {
+    flex: 1;
+}
+
+#startDvalue {
+    flex: 1;
+}
+
 .transactionTable {
     -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0.47);
     box-shadow: 2px 4px 10px 1px rgba(0, 0, 0.47);
@@ -96,4 +109,29 @@ body {
 
 .errorMSG {
     color: crimson;
+}
+
+#warningHeader {
+    color: crimson;
+    padding-bottom: 4vh;
+}
+
+#warningDescription {
+    padding-bottom: 4vh;
+    padding-left: 25vh;
+    text-align: left;
+}
+
+#warning {
+    margin-top: 30vh;
+    margin-left: 35vh;
+    margin-bottom: 38.3vh;
+    background-color: aliceblue;
+    padding: 6vh;
+    padding-bottom: 2vh;
+    border-radius: 1em;
+    color: rgb(27, 52, 123);
+    width: 65%;
+    min-width: 40%;
+    text-align: center;
 }

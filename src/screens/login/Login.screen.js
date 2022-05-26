@@ -6,6 +6,7 @@ import { loginContext } from "../../App";
 import "./login.styles.css";
 import { Grid, Paper, Avatar, TextField, Button } from "@mui/material";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
+import { Footer } from "../../components";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -73,14 +74,15 @@ const Login = () => {
     backgroundColor: "#357cc1",
   };
   return (
+    <>
     <Grid id="main-container-loginpage" style={bgStyle}>
       <Paper id="loginBox" elevation={10} style={paperStyle}>
         <Grid align="center">
+          <h2 id="companyLogo"> Paymentus </h2>{" "}
           <Avatar style={avatarStyle}>
             {" "}
             <LockRoundedIcon />{" "}
           </Avatar>{" "}
-          <h2> Login </h2>{" "}
         </Grid>{" "}
         <form onSubmit={checkCredentials}>
           <TextField
@@ -123,6 +125,7 @@ const Login = () => {
         </form>{" "}
       </Paper>{" "}
     </Grid>
+    </>
   );
 };
 export default Login;

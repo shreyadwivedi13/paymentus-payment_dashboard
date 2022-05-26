@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useIdleTimer } from 'react-idle-timer'
 
 import { TimeoutModal } from '../timeout-modal';
+import { Footer } from '../../components';
 
 import { Logout} from '@mui/icons-material';
 import { Button } from '@mui/material';
@@ -137,7 +138,7 @@ const Topbar = () => {
                 </div>
 
             </div>
-            </div>) : (<h1>You are not logged in</h1>)
+           </div> ) : (<div><h1>You are not logged in</h1><Footer/></div>)
         }
         </>
     )
