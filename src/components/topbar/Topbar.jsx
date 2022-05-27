@@ -13,7 +13,7 @@ import { Logout} from '@mui/icons-material';
 import { Button } from '@mui/material';
 import "./topbar.styles.css"
 
-const IDLE_TIME = 60;
+const IDLE_TIME = 600000;
 const LOGOUT_TIME = 300000;
 const REFRESH_API_TOKEN = 600000;
 let logoutTimerId = undefined;
@@ -36,19 +36,19 @@ const Topbar = () => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json'},
                     body: JSON.stringify(refreshObject)
-                  };
+                };
                 
-                  const request = fetch('http://localhost:3300/login/refresh-token', requestOptions);
-                  const response = await request;
-                  const data = await response.json();
-                  console.log(data)
-                 sessionStorage.setItem("accessToken", data.token);
+                const request = fetch('http://localhost:3300/login/refresh-token', requestOptions);
+                const response = await request;
+                const data = await response.json();
+                console.log(data)
+                sessionStorage.setItem("accessToken", data.token);
                 sessionStorage.setItem("refreshToken", data.refreshtoken);
-    
-                }
-                refreshTheToken();
-     });
-     
+            }
+
+            refreshTheToken();
+    }, []);
+
     useEffect(() => {
         const refreshTokenTimerId = setInterval(() => {
             const refreshtoken = sessionStorage.getItem("refreshToken");
@@ -63,13 +63,13 @@ const Topbar = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify(refreshObject)
-              };
+            };
             
-              const request = fetch('http://localhost:3300/login/refresh-token', requestOptions);
-              const response = await request;
-              const data = await response.json();
-              console.log(data)
-             sessionStorage.setItem("accessToken", data.token);
+            const request = fetch('http://localhost:3300/login/refresh-token', requestOptions);
+            const response = await request;
+            const data = await response.json();
+            console.log(data)
+            sessionStorage.setItem("accessToken", data.token);
             sessionStorage.setItem("refreshToken", data.refreshtoken);
 
             }
@@ -130,7 +130,7 @@ const Topbar = () => {
                     <div className="topbarIconContainer" style={topbarIconStyles}>
                     <h2 id="activeUser">Hello, {loginState.activeUsername}</h2>
                     <Button id="logOut"onClick={handleLogout} variant="contained" fontSize="large" fullWidth style={buttonStyle}><Logout/>Logout</Button>
-                     <TimeoutModal show={showModal} toShowModal={handleShowModal} />
+                    <TimeoutModal show={showModal} toShowModal={handleShowModal} toLogOut={handleLogout}/>
 
 
                   

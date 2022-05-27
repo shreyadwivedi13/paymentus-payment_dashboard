@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import axios from "axios";
 
 import { Sidebar, Topbar,Footer,ErrorPage} from "../../components";
 
@@ -8,6 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import { Table,TableCell,TableContainer,TableHead,TableRow, Paper, FormControl, TextField, Button ,InputLabel,Select,MenuItem, TableBody, Grid} from '@mui/material';
 import {PageviewRounded,ScreenSearchDesktop, SearchRounded} from '@mui/icons-material';
+
+
+let recordsLimit = 5;
+let pageNumber = 1;
+let totalData = 0;
+let totalPages = 0;
+let prevPage = 0;
+const arr = {};
 
 
 const Dashboard = () => {
@@ -36,17 +45,46 @@ const Dashboard = () => {
     useState("");
   const [invalidPaymentDateRange, setInvalidPaymentDateRange] = useState("");
   const [atLeastOneFieldRequired, setAtLeastOneFieldRequired] = useState("");
-  //validation Variable
+  const [menuItemObj, setMenuItemObj] = useState({});
 
-  var [pageNumber, setPageNumber ] = useState(1);
-  var [totalPages, setTotalPages ] = useState();
+  //validation Variable
+  // var [totalPages, setTotalPages ] = useState();
+  const [recordsLimitState, setRecordsLimitState] = useState("5");
 
   const navigate = useNavigate();
 
-  const arr = {}
+//sececlt options fetch from database
+  useEffect(() => {
+    const getSelectOptions = async (pageNumber) => {
+      const token = sessionStorage.getItem("accessToken");
+    
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'auth-token': token },
+      };
+      
+      const request = await fetch('http://localhost:3300/payments/meta-data', requestOptions);
+      const response = await request;
+      const data = await response.json();
+      setMenuItemObj({...data});    
+      console.log(data);
+    };
+
+    getSelectOptions();
+  }, []);
+  //end
+
+  // metaFeildsStatus
+
+  // metaFeildsPaymentType
+
+  // metaFeildschannel
+
+  // metaFeildsPaymentMethod
+
 
   const inputHandler = (event) => {
-    setPageNumber(1);
+    pageNumber = 1;
     setTableVisible(false);
     if (event.target.name === "user_id") {
       setUserId(event.target.value);
@@ -136,7 +174,7 @@ const Dashboard = () => {
 
     if (startDate !== "" && endDate !== "") {
       if (startDate > endDate) {
-        setInvalidPaymentDateRange("Invalid Amount Range");
+        setInvalidPaymentDateRange("Invalid Date");
         return;
       } else {
         setInvalidPaymentDateRange("");
@@ -144,12 +182,11 @@ const Dashboard = () => {
       }
     }
 
-   
 
     populateFilterData();
- 
-  getTableData(pageNumber);
-  setTableVisible(true);
+
+    getTableData(pageNumber,recordsLimit);
+    setTableVisible(true);
 
   };
 
@@ -199,8 +236,7 @@ const Dashboard = () => {
   
       arr["startDate"] = startDate;
       console.log("startDate added")
-   
-   
+
       arr["endDate"] = endDate;
       console.log("endDate added")
 
@@ -214,49 +250,62 @@ const Dashboard = () => {
     } 
   }
 
-  const getTableData = async (pageNumber) => {
+  const getTableData = async (pageNumber,fetchRecordLimit) => {
     const token = sessionStorage.getItem("accessToken");
     console.log(arr)
 
     // Simple POST request with a JSON body using fetch
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json',
-                 'auth-token': token },
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': token 
+      },
       body: JSON.stringify(arr)
     };
-  
-    const request = fetch('http://localhost:3300/payments?page='+pageNumber, requestOptions);
+
+    const request = fetch(`http://localhost:3300/payments?limit=${fetchRecordLimit}&page=${pageNumber}` , requestOptions);
     const response = await request;
     const data = await response.json();
-    console.log(data.numberOfPages)
-    console.log(data.payments)
-    setTotalPages(data.numberOfPages);
+    totalData = data.numberOfPages;
+    totalPages = Math.ceil(totalData / recordsLimit);
+    console.log("total data: ", data.numberOfPages);
+    console.log("total page: ", totalPages);
     setPaymentData(data.payments);
-    console.log(paymentData)
- 
-};
+    console.log(data.payments)
+  };
 
   function handleNextPage() {
+    if (pageNumber >= totalPages) return;
+
     populateFilterData();
     pageNumber++;
-    setPageNumber(pageNumber)
-    
-   getTableData(pageNumber);
+    getTableData(pageNumber,recordsLimit);
   };
 
   function handlePreviousPage() {
+    if (pageNumber <= 1) return;
+
     populateFilterData();
     pageNumber--;
-    setPageNumber(pageNumber)
-   getTableData(pageNumber);
+    getTableData(pageNumber,recordsLimit);
   };
 
- 
+  const tableEntriesHandler = (event) => {
+    populateFilterData();
+    prevPage = pageNumber;
+    setRecordsLimitState(event.target.value)
+    recordsLimit = event.target.value;
+    totalPages = Math.ceil(totalData / recordsLimit);
+    if (prevPage > totalPages) {
+      pageNumber = totalPages;
+    }
+    getTableData(pageNumber, recordsLimit);
+  }
     
   const textfieldStyle={}
   const buttonStyle = { margin: "40px auto", borderRadius: "1rem", backgroundColor: "#357cc1" }
-  const pageNavbtn = {marginLeft: "10px", marginBottom: "10px"}
+  const pageNavbtn = {marginLeft: "20px", marginBottom: "20px", marginTop:"0"}
 
   const paperStyle = {padding:30, margin: "-1% 5vh" ,width:"85vh", borderRadius:'1.5rem', backgroundColor:"aliceblue", minWidth:"250px", minHeight:"300px"}
 
@@ -264,13 +313,10 @@ const Dashboard = () => {
     <>
       {loginState.isLoggedIn ? (
         <section>
-           <Topbar />
-                 <div className='container'>
-          <h1>{channel}</h1>
+          <Topbar />
+          <div className='container'>
           <Sidebar />
           <div className="dashboard">
-
-
           <br></br>
           <br></br>
 
@@ -342,20 +388,8 @@ const Dashboard = () => {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={"returns_chargebacks_channel"}>Returns/Chargebacks Channel
-</MenuItem>
-          <MenuItem value={"agent_dashboard"}>Agent Dashboard (Debit)</MenuItem>
-          <MenuItem value={"integration_gateway"}>Integration Gateway</MenuItem>
-          <MenuItem value={"instant_payment_network"}>Instant Payment Network</MenuItem>
-          <MenuItem value={"ivr_channel"}>IVR Channel</MenuItem>
-          <MenuItem value={"moneygram"}>MoneyGram</MenuItem>
-          <MenuItem value={"mobile_channel"}>Mobile Channel</MenuItem>
-          <MenuItem value={"pdf_paymeny"}>PDF Payment</MenuItem>
-          <MenuItem value={"pro_active_payment"}>Pro Active Payment</MenuItem>
-          <MenuItem value={"mastercard_rpps"}>MasterCard RPPS</MenuItem>
-          <MenuItem value={"scheduled_payment_channel"}> Scheduled Payment Channel</MenuItem>
-          <MenuItem value={"sms_payment"}>SMS Payment</MenuItem>
-          <MenuItem value={"web_channel"}>Web Channel</MenuItem>
+          {menuItemObj.hasOwnProperty('metaFeildschannel') && menuItemObj['metaFeildschannel'].map((item) => (<MenuItem value={item} key={item}>{item}</MenuItem>))}
+
         </Select>
       </FormControl>
       <br></br>
@@ -373,20 +407,26 @@ const Dashboard = () => {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={"visa"}>Visa</MenuItem>
-          <MenuItem value={"visa_debit"}>Visa (Debit)</MenuItem>
-          <MenuItem value={"mastercard"}>MasterCard</MenuItem>
-          <MenuItem value={"mastercard_debit"}>MasterCard (Debit)</MenuItem>
-          <MenuItem value={"american_express"}>American Express</MenuItem>
-          <MenuItem value={"checking_account"}>Checking Account</MenuItem>
-          <MenuItem value={"discover"}>Discover</MenuItem>
-          <MenuItem value={"savings_accounts"}>Savings Accounts</MenuItem>
-          <MenuItem value={"walkin_cash"}>Walkin Cash</MenuItem>
-          <MenuItem value={"fiserv_external_payment"}>Fiserv External Payment</MenuItem>
-          <MenuItem value={"mastercard_rpps_external_payment"}>MasterCard RPPS External Payment</MenuItem>
-          <MenuItem value={"ipppays_kiosk_cash"}>IPPPays Kiosk Cash</MenuItem>
-          <MenuItem value={"walkin_check"}>Walkin Check</MenuItem>
-          <MenuItem value={"green_dot"}>Green Dot</MenuItem>
+          {menuItemObj.hasOwnProperty('metaFeildsPaymentMethod') && menuItemObj['metaFeildsPaymentMethod'].map((item) => (<MenuItem value={item} key={item}>{item}</MenuItem>))}
+        </Select>
+      </FormControl>
+            <br></br>
+            <br></br>
+
+            <FormControl fullWidth >
+        <InputLabel id="demo-simple-select-standard-label">Payment Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={paymentType}
+          onChange={inputHandler}
+          label="Payment Type"
+          name="paymentType"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {menuItemObj.hasOwnProperty('metaFeildsPaymentType') && menuItemObj['metaFeildsPaymentType'].map((item) => (<MenuItem value={item} key={item}>{item}</MenuItem>))}
         </Select>
       </FormControl>
             <br></br>
@@ -404,24 +444,8 @@ const Dashboard = () => {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={"accepted"}>Accepted</MenuItem>
-          <MenuItem value={"authorized"}>Authorized</MenuItem>
-          <MenuItem value={"mastercard"}>Cancelled</MenuItem>
-          <MenuItem value={"declined"}>Declined</MenuItem>
-          <MenuItem value={"failed"}>Failed</MenuItem>
+          {menuItemObj.hasOwnProperty('metaFeildsStatus') && menuItemObj['metaFeildsStatus'].map((item) => (<MenuItem value={item} key={item}>{item}</MenuItem>))}
 
-          <MenuItem value={"processing"}>Processing</MenuItem>
-
-          <MenuItem value={"queued"}>Queued</MenuItem>
-
-          <MenuItem value={"returned"}>Returned</MenuItem>
-
-          <MenuItem value={"scheduled"}>Scheduled</MenuItem>
-
-          <MenuItem value={"submitted"}>Submitted</MenuItem>
-          <MenuItem value={"cancelled_void"}>Cancelled (Void)</MenuItem>
-          <MenuItem value={"refunded"}>Refunded</MenuItem>
-          <MenuItem value={"card_present_terminal_initiated"}> Card-Present Terminal Initiated</MenuItem>
         </Select>
             </FormControl>
             <br></br>
@@ -432,9 +456,9 @@ const Dashboard = () => {
             <br></br> 
           
             <TextField style={textfieldStyle}
-             className = "standard-basic"
-             label="From "
-             fullWidth
+              className = "standard-basic"
+              label="From "
+              fullWidth
               value={paymentAmountMinRange}
               onChange={inputHandler}
               type="number"
@@ -443,9 +467,9 @@ const Dashboard = () => {
     <br></br>
     <br></br>
             <TextField style={textfieldStyle}
-             className = "standard-basic"
-             label="To "
-             fullWidth
+              className = "standard-basic"
+              label="To "
+              fullWidth
               value={paymentAmountMaxRange}
               onChange={inputHandler}
               type="number"
@@ -492,6 +516,8 @@ const Dashboard = () => {
           </Paper>
           
           {isTableVisible && <h4><div className="transactions"></div>
+         
+
           <div className="transactionTable">
           <strong><h2>Transactions:</h2></strong>
 
@@ -531,6 +557,25 @@ const Dashboard = () => {
               ))}
             </TableBody>
             </Table>
+            < div id="recNo">
+            <FormControl >
+        <InputLabel id="demo-simple-select-standard-label1">Select Number of Records</InputLabel>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={recordsLimitState}
+          onChange={tableEntriesHandler}
+          label="Number of Records per page"
+        >
+          <MenuItem value={"5"}>5</MenuItem>
+          <MenuItem value={"10"}>10</MenuItem>
+          <MenuItem value={"15"}>15</MenuItem>
+          <MenuItem value={"20"}>20</MenuItem>
+        </Select>
+      </FormControl>
+      </div>
+            <br></br>
+            <br></br>
             <Button type="button" variant="contained" size="small" disabled={pageNumber===1} onClick={handlePreviousPage} style={pageNavbtn}>Previous Page</Button>
           <Button type="button"variant="contained" size="small"  disabled={pageNumber===totalPages} onClick={handleNextPage} style={pageNavbtn}>Next Page</Button>
          
