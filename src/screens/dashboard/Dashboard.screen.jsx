@@ -522,6 +522,25 @@ const Dashboard = () => {
           <strong><h2>Transactions:</h2></strong>
 
             <TableContainer component={Paper}>
+            < div id="recNo">
+            <FormControl >
+        <InputLabel id="demo-simple-select-standard-label1">Select Number of Records</InputLabel>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={recordsLimitState}
+          onChange={tableEntriesHandler}
+          label="Number of Records per page"
+        >
+          <MenuItem value={"5"}>5</MenuItem>
+          <MenuItem value={"10"}>10</MenuItem>
+          <MenuItem value={"15"}>15</MenuItem>
+          <MenuItem value={"20"}>20</MenuItem>
+        </Select>
+      </FormControl>
+      </div>
+            <br></br>
+            <br></br>
             <Table className="tables" aria-label="simple table"  >
             <TableHead >
             <TableRow>
@@ -557,26 +576,7 @@ const Dashboard = () => {
               ))}
             </TableBody>
             </Table>
-            < div id="recNo">
-            <FormControl >
-        <InputLabel id="demo-simple-select-standard-label1">Select Number of Records</InputLabel>
-        <Select
-          labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
-          value={recordsLimitState}
-          onChange={tableEntriesHandler}
-          label="Number of Records per page"
-        >
-          <MenuItem value={"5"}>5</MenuItem>
-          <MenuItem value={"10"}>10</MenuItem>
-          <MenuItem value={"15"}>15</MenuItem>
-          <MenuItem value={"20"}>20</MenuItem>
-        </Select>
-      </FormControl>
-      </div>
-            <br></br>
-            <br></br>
-            <Button type="button" variant="contained" size="small" disabled={pageNumber===1} onClick={handlePreviousPage} style={pageNavbtn}>Previous Page</Button>
+                   <Button type="button" variant="contained" size="small" disabled={pageNumber===1} onClick={handlePreviousPage} style={pageNavbtn}>Previous Page</Button>
           <Button type="button"variant="contained" size="small"  disabled={pageNumber===totalPages} onClick={handleNextPage} style={pageNavbtn}>Next Page</Button>
          
 </TableContainer>
